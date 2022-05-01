@@ -25,7 +25,15 @@ class ToyWebpack {
       },
       entry,
     };
-    console.log(newOptions, options);
+    if (options.module?.rules) {
+      const rules =
+        options.module?.rules.map((rule) => {
+          rule.use = path.join(cwd, rule.use);
+          return rule;
+        }) || [];
+      console.log(rules);
+      newOptions.module.rules = rules;
+    }
     return newOptions;
   }
 }

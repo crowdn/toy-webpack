@@ -11,6 +11,24 @@ class Compiler {
     this.output = output;
     // 模块
     this.modules = [];
+
+    this.loaders = [];
+    if (options.module?.rules) {
+      this.loaders = options.module?.rules
+        .filter((rule) => !!rule.use)
+        .map((rule) => {
+          const normal = require(rule.use);
+          return {
+            path: rule.use,
+            query: rule.test,
+            pitch: rule.pitch,
+            normal,
+            raw: rule.raw,
+            pitchExecuted: false,
+            normalExecuted: true,
+          };
+        });
+    }
   }
   run() {
     const info = this.build(this.entry);
@@ -56,12 +74,33 @@ class Compiler {
     };
   }
 
-  // TODO: 根据文件类型，采用不同的loader
+  // 根据文件类型，采用不同的loader
   parse(filename) {
     // 应该按照 loaders提供的匹配方式，采用不同的loader解析
-    const { getAst } = Parser;
-    // 这里暂时不考虑其他文件类型
-    return getAst(filename);
+    const activeLoader = this.loaders
+      .reduce((loaders, loader) => {
+        if (loader.query.test(filename)) loaders.push(loader);
+        return loaders;
+      }, [])
+      .reverse();
+    const { getAst, getAstWithContent } = Parser;
+
+    if (activeLoader.length) {
+      let content = fs.readFileSync(filename, 'utf-8');
+      for (let loader of activeLoader) {
+        const data = loader.pitch?.();
+        loader.data = data;
+      }
+
+      for (let i = activeLoader.length - 1; i >= 0; i--) {
+        const { normal, options } = activeLoader[i];
+        content = normal(content, options);
+      }
+
+      return getAstWithContent(content);
+    } else {
+      return getAst(filename);
+    }
   }
 
   // 用闭包的方式重写 require函数, 输出bundle

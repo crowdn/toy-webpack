@@ -1,12 +1,15 @@
 # toy-webpack
+
 A toy-like webpack showing the fundamentals of webpack build packaging
 
-# run demo
+# run example
+
 ```shell
-node run demo
+node run example
 ```
 
-# todo 
+# todo
 
-- [ ] Support loader and plugin
+- [x] Support loader
+- [ ] Support plugin
 - [ ] Solve circular reference problems

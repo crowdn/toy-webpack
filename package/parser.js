@@ -10,6 +10,10 @@ const Parser = {
     // 将文件内容转为AST抽象语法树
     return parser.parse(content, { sourceType: 'module' });
   },
+  getAstWithContent: (content) => {
+    // 将文件内容转为AST抽象语法树
+    return parser.parse(content, { sourceType: 'module' });
+  },
   getDependecies: (ast, filename) => {
     const dependecies = {};
     // 遍历所有的 import 模块,存入dependecies

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "demo": "cd demo && node build.js"
+    "example": "cd example && node build.js"
   },
   "author": "",
   "license": "ISC",
