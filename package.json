@@ -1,0 +1,17 @@
+{
+  "name": "toy-webpack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "demo": "cd demo && node build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/parser": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "@babel/traverse": "^7.17.10"
+  }
+}
